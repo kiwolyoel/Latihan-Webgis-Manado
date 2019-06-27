@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css"><link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css"><link rel="stylesheet" href="css/L.Control.Locate.min.css">
+        <link rel="stylesheet" href="css/qgis2web.css">
+        <link rel="stylesheet" href="css/MarkerCluster.css">
+        <link rel="stylesheet" href="css/MarkerCluster.Default.css">
+        <link rel="stylesheet" href="css/leaflet-search.css">
+        <link rel="stylesheet" href="css/Control.OSMGeocoder.css">
+        <link rel="stylesheet" href="css/leaflet-measure.css">
+        <style>
+        #map {
+            width: 1565px;
+            height: 875px;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script><script src="js/L.Control.Locate.min.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/Control.OSMGeocoder.js"></script>
+        <script src="js/leaflet-measure.js"></script>
+        <script src="js/leaflet.markercluster.js"></script>
+        <script src="js/leaflet-search.js"></script>
+        <script src="data/adm_0.js"></script>
+        <script src="data/Jalan_Manado_1.js"></script>
+        <script src="data/sd_manado_2.js"></script>
+        <script src="data/Rumah_sakit_3.js"></script>
+        <script>
+        var password;
+        var pass1="ayoapacoba";
+        password=prompt('WebGIS ini dikunci, silahkan masukkan kata sandi',' ');
+        if (password==pass1)
+         alert('kata sandi yang anda masukkan benar ! klik OK untuk melanjutkan!');
+        else
+         {
+          window.location="https://www.youtube.com/watch?v=OTzRguDqa9A"
+          };
+
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:1
+        }).fitBounds([[1.42386114691,124.601351792],[1.65457057924,125.013032093]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.addAttribution('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a>');
+        L.control.locate().addTo(map);
+        var measureControl = new L.Control.Measure({
+            primaryLengthUnit: 'meters',
+            secondaryLengthUnit: 'kilometers',
+            primaryAreaUnit: 'sqmeters',
+            secondaryAreaUnit: 'hectares'
+        });
+        measureControl.addTo(map);
+        var bounds_group = new L.featureGroup([]);
+        var basemap0 = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors,<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+            maxZoom: 28
+        });
+        basemap0.addTo(map);
+        function setBounds() {
+        }
+        function pop_adm_0(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['OBJECTID'] !== null ? Autolinker.link(String(feature.properties['OBJECTID'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['KODE_UNSUR'] !== null ? Autolinker.link(String(feature.properties['KODE_UNSUR'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['NAMA_UNSUR'] !== null ? Autolinker.link(String(feature.properties['NAMA_UNSUR'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">DESA</th>\
+                        <td>' + (feature.properties['DESA'] !== null ? Autolinker.link(String(feature.properties['DESA'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['KECAMATAN'] !== null ? Autolinker.link(String(feature.properties['KECAMATAN'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['KABUPATEN'] !== null ? Autolinker.link(String(feature.properties['KABUPATEN'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['PROVINSI'] !== null ? Autolinker.link(String(feature.properties['PROVINSI'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['PELAKSANA'] !== null ? Autolinker.link(String(feature.properties['PELAKSANA'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['UPDATED'] !== null ? Autolinker.link(String(feature.properties['UPDATED'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Shape_Leng'] !== null ? Autolinker.link(String(feature.properties['Shape_Leng'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Shape_Area'] !== null ? Autolinker.link(String(feature.properties['Shape_Area'])) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_adm_0_0(feature) {
+            switch(String(feature.properties['KECAMATAN'])) {
+                case 'BUNAKEN':
+                    return {
+                pane: 'pane_adm_0',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(117,91,232,1.0)',
+            }
+                    break;
+                case 'BUNAKEN KEPULAUAN':
+                    return {
+                pane: 'pane_adm_0',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(233,203,142,1.0)',
+            }
+                    break;
+                case 'MALALAYANG':
+                    return {
+                pane: 'pane_adm_0',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(225,98,72,1.0)',
+            }
+                    break;
+                case 'MAPANGET':
+                    return {
+                pane: 'pane_adm_0',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(51,202,236,1.0)',
+            }
+                    break;
+                case 'PAL DUA':
+                    return {
+                pane: 'pane_adm_0',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(65,222,91,1.0)',
+            }
+                    break;
+                case 'SARIO':
+                    return {
+                pane: 'pane_adm_0',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(55,113,238,1.0)',
+            }
+                    break;
+                case 'SINGKIL':
+                    return {
+                pane: 'pane_adm_0',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(214,25,183,1.0)',
+            }
+                    break;
+                case 'TIKALA':
+                    return {
+                pane: 'pane_adm_0',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(135,237,84,1.0)',
+            }
+                    break;
+                case 'TUMINTING':
+                    return {
+                pane: 'pane_adm_0',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(52,210,160,1.0)',
+            }
+                    break;
+                case 'WANEA':
+                    return {
+                pane: 'pane_adm_0',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(188,217,39,1.0)',
+            }
+                    break;
+                case 'WENANG':
+                    return {
+                pane: 'pane_adm_0',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(147,28,202,1.0)',
+            }
+                    break;
+                default:
+                    return {
+                pane: 'pane_adm_0',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(222,33,96,1.0)',
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_adm_0');
+        map.getPane('pane_adm_0').style.zIndex = 400;
+        map.getPane('pane_adm_0').style['mix-blend-mode'] = 'normal';
+        var layer_adm_0 = new L.geoJson(json_adm_0, {
+            attribution: '<a href=""></a>',
+            pane: 'pane_adm_0',
+            onEachFeature: pop_adm_0,
+            style: style_adm_0_0,
+        });
+        bounds_group.addLayer(layer_adm_0);
+        map.addLayer(layer_adm_0);
+        function pop_Jalan_Manado_1(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['KODE_UNSUR'] !== null ? Autolinker.link(String(feature.properties['KODE_UNSUR'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['NAMA_UNSUR'] !== null ? Autolinker.link(String(feature.properties['NAMA_UNSUR'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['TOPONIM'] !== null ? Autolinker.link(String(feature.properties['TOPONIM'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['PELAKSANA'] !== null ? Autolinker.link(String(feature.properties['PELAKSANA'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['UPDATED'] !== null ? Autolinker.link(String(feature.properties['UPDATED'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Shape_Leng'] !== null ? Autolinker.link(String(feature.properties['Shape_Leng'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Shape_Le_1'] !== null ? Autolinker.link(String(feature.properties['Shape_Le_1'])) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Jalan_Manado_1_0() {
+            return {
+                pane: 'pane_Jalan_Manado_1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+            }
+        }
+        map.createPane('pane_Jalan_Manado_1');
+        map.getPane('pane_Jalan_Manado_1').style.zIndex = 401;
+        map.getPane('pane_Jalan_Manado_1').style['mix-blend-mode'] = 'normal';
+        var layer_Jalan_Manado_1 = new L.geoJson(json_Jalan_Manado_1, {
+            attribution: '<a href=""></a>',
+            pane: 'pane_Jalan_Manado_1',
+            onEachFeature: pop_Jalan_Manado_1,
+            style: style_Jalan_Manado_1_0,
+        });
+        bounds_group.addLayer(layer_Jalan_Manado_1);
+        map.addLayer(layer_Jalan_Manado_1);
+        function pop_sd_manado_2(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['KODE_UNSUR'] !== null ? Autolinker.link(String(feature.properties['KODE_UNSUR'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>NAMA_UNSUR</strong><br />' + (feature.properties['NAMA_UNSUR'] !== null ? Autolinker.link(String(feature.properties['NAMA_UNSUR'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">TOPONIM</th>\
+                        <td>' + (feature.properties['TOPONIM'] !== null ? Autolinker.link(String(feature.properties['TOPONIM'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['PELAKSANA'] !== null ? Autolinker.link(String(feature.properties['PELAKSANA'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['UPDATED'] !== null ? Autolinker.link(String(feature.properties['UPDATED'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['OBJECTID'] !== null ? Autolinker.link(String(feature.properties['OBJECTID'])) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_sd_manado_2_0() {
+            return {
+                pane: 'pane_sd_manado_2',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/SVG_School.svg',
+            iconSize: [11.4, 11.4]
+        }),
+            }
+        }
+        map.createPane('pane_sd_manado_2');
+        map.getPane('pane_sd_manado_2').style.zIndex = 402;
+        map.getPane('pane_sd_manado_2').style['mix-blend-mode'] = 'normal';
+        var layer_sd_manado_2 = new L.geoJson(json_sd_manado_2, {
+            attribution: '<a href=""></a>',
+            pane: 'pane_sd_manado_2',
+            onEachFeature: pop_sd_manado_2,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_sd_manado_2_0(feature));
+            },
+        });
+        var cluster_sd_manado_2 = new L.MarkerClusterGroup({showCoverageOnHover: false,
+            spiderfyDistanceMultiplier: 2});
+        cluster_sd_manado_2.addLayer(layer_sd_manado_2);
+
+        bounds_group.addLayer(layer_sd_manado_2);
+        cluster_sd_manado_2.addTo(map);
+        function pop_Rumah_sakit_3(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['KODE_UNSUR'] !== null ? Autolinker.link(String(feature.properties['KODE_UNSUR'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>NAMA_UNSUR</strong><br />' + (feature.properties['NAMA_UNSUR'] !== null ? Autolinker.link(String(feature.properties['NAMA_UNSUR'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">TOPONIM</th>\
+                        <td>' + (feature.properties['TOPONIM'] !== null ? Autolinker.link(String(feature.properties['TOPONIM'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['PELAKSANA'] !== null ? Autolinker.link(String(feature.properties['PELAKSANA'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['UPDATED'] !== null ? Autolinker.link(String(feature.properties['UPDATED'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['OBJECTID'] !== null ? Autolinker.link(String(feature.properties['OBJECTID'])) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Rumah_sakit_3_0() {
+            return {
+                pane: 'pane_Rumah_sakit_3',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/cross.svg',
+            iconSize: [19.0, 19.0]
+        }),
+            }
+        }
+        map.createPane('pane_Rumah_sakit_3');
+        map.getPane('pane_Rumah_sakit_3').style.zIndex = 403;
+        map.getPane('pane_Rumah_sakit_3').style['mix-blend-mode'] = 'normal';
+        var layer_Rumah_sakit_3 = new L.geoJson(json_Rumah_sakit_3, {
+            attribution: '<a href=""></a>',
+            pane: 'pane_Rumah_sakit_3',
+            onEachFeature: pop_Rumah_sakit_3,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_Rumah_sakit_3_0(feature));
+            },
+        });
+        var cluster_Rumah_sakit_3 = new L.MarkerClusterGroup({showCoverageOnHover: false,
+            spiderfyDistanceMultiplier: 2});
+        cluster_Rumah_sakit_3.addLayer(layer_Rumah_sakit_3);
+
+        bounds_group.addLayer(layer_Rumah_sakit_3);
+        cluster_Rumah_sakit_3.addTo(map);
+        var osmGeocoder = new L.Control.OSMGeocoder({
+            collapsed: false,
+            position: 'topright',
+            text: 'Search',
+        });
+        osmGeocoder.addTo(map);
+        setBounds();
+        map.addControl(new L.Control.Search({
+            layer: cluster_Rumah_sakit_3,
+            initial: false,
+            hideMarkerOnCollapse: true,
+            propertyName: 'TOPONIM'}));
+        </script>
+    </body>
+</html>
